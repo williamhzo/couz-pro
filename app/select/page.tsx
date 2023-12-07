@@ -1,16 +1,22 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { getNextSaturdays, getWeekendRange } from '@/lib/utils';
 import add from 'date-fns/add';
 import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
 export default function Select() {
+  const [submitted, setSubmitted] = useState(false);
+
+  const [availabilities, setAvailabilities] = useState([]);
+
+  const weekends = getNextSaturdays(10);
+
   const searchParams = useSearchParams();
   const user = searchParams.get('couz');
-
-  const weekends = getNextSaturdays(15);
 
   return (
     <main className="flex flex-col gap-12">
@@ -20,7 +26,7 @@ export default function Select() {
 
       <ul>
         {weekends.map((weekend) => (
-          <div key={weekend.toISOString()} className="mb-8 ">
+          <div key={weekend.toISOString()} className="mb-8">
             <div className="flex justify-between items-end">
               <p className="text-sm">{getWeekendRange(weekend)}</p>
 
@@ -46,6 +52,16 @@ export default function Select() {
           </div>
         ))}
       </ul>
+
+      <div className="self-end">
+        {submitted ? (
+          <p className="text-sm">bien reçu, cimer 🫡</p>
+        ) : (
+          <Button onClick={() => console.log('handleSubmit')}>
+            j&apos;envoie
+          </Button>
+        )}
+      </div>
     </main>
   );
 }

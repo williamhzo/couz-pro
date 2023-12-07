@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className={cn(inter.className, 'py-12 px-5')}>
+      <body className={cn(inter.className, 'py-12 px-5 min-h-screen')}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

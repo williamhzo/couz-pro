@@ -1,7 +1,9 @@
+import { Heading } from '@/components/ui/heading';
+
 export default function Results() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
-      results
+    <main className="">
+      <Heading>results</Heading>
     </main>
   );
 }

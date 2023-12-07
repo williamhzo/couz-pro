@@ -6,9 +6,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getNextSaturdays(limit: number = 15) {
-  const today = new Date();
-  const nextSaturday = add(new Date(), {
+export function getNextSaturdays(limit: number) {
+  const today = add(new Date(), { months: 1 });
+  const nextSaturday = add(today, {
     days: 6 - today.getDay() + 7,
   });
 

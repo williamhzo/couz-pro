@@ -35,10 +35,10 @@ const MOCKED_NAMES = [
   'vicashdo',
   'vince',
   'waffle',
-];
+] as const;
 
 const FormSchema = z.object({
-  name: z.string().min(1).max(50),
+  name: z.enum(MOCKED_NAMES),
 });
 
 export default function Home() {

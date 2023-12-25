@@ -16,6 +16,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
@@ -73,6 +74,7 @@ export const SelectUserForm: FC<SelectUserFormProps> = ({ users }) => {
                   ))}
                 </SelectContent>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />

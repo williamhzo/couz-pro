@@ -5,8 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { cn, getNextSaturdays, getWeekendRange } from '@/lib/utils';
 import { User } from '@/types/common';
-import { useRouter } from 'next/navigation';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 
 export const SelectAvailabilityForm: FC<{ userId: User['id'] }> = ({
   userId,
@@ -16,21 +15,27 @@ export const SelectAvailabilityForm: FC<{ userId: User['id'] }> = ({
   const weekends = getNextSaturdays(12);
 
   const handleSubmit = async () => {
+    setSubmitted(true);
     alert(JSON.stringify({ availabilities, userId }));
   };
 
   return (
     <>
-      <ul>
+      <ul className="flex flex-col gap-2">
         {weekends.map((weekend) => {
           const weekendISO = weekend.toDateString();
           const checked = availabilities.includes(weekendISO);
           return (
-            <div key={weekendISO} className="mb-8">
-              <div className="flex justify-between items-center">
+            <div key={weekendISO}>
+              <div
+                className={cn(
+                  'flex justify-between items-center transition-colors rounded duration-200 border pr-5',
+                  checked ? 'border-foreground/75' : 'border-muted'
+                )}
+              >
                 <Label
                   className={cn(
-                    'text-sm w-full transition-colors duration-200',
+                    'text-sm w-full transition-colors duration-200 pl-5 py-4',
                     checked ? 'text-foreground' : 'text-muted-foreground'
                   )}
                   htmlFor={weekendISO}
@@ -41,8 +46,9 @@ export const SelectAvailabilityForm: FC<{ userId: User['id'] }> = ({
                 <Checkbox
                   id={weekendISO}
                   checked={checked}
-                  onCheckedChange={(checked) => {
-                    checked
+                  disabled={submitted}
+                  onCheckedChange={(value) => {
+                    value
                       ? setAvailabilities([...availabilities, weekendISO])
                       : setAvailabilities(
                           availabilities.filter((d) => d !== weekendISO)
@@ -50,8 +56,6 @@ export const SelectAvailabilityForm: FC<{ userId: User['id'] }> = ({
                   }}
                 />
               </div>
-
-              <hr className="h-px border-none bg-border mt-2" />
             </div>
           );
         })}

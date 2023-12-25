@@ -1,30 +1,37 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { submitAvailability } from '@/app/actions';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { cn, getNextSaturdays, getWeekendRange } from '@/lib/utils';
 import { User } from '@/types/common';
+import Link from 'next/link';
 import { FC, useState } from 'react';
 
 export const SelectAvailabilityForm: FC<{ userId: User['id'] }> = ({
   userId,
 }) => {
   const [submitted, setSubmitted] = useState(false);
-  const [availabilities, setAvailabilities] = useState<string[]>([]);
+  const [availability, setAvailability] = useState<string[]>([]);
   const weekends = getNextSaturdays(12);
 
-  const handleSubmit = async () => {
+  function handleSubmit() {
     setSubmitted(true);
-    alert(JSON.stringify({ availabilities, userId }));
-  };
+
+    try {
+      submitAvailability({ userId, availability });
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <>
       <ul className="flex flex-col gap-2">
         {weekends.map((weekend) => {
           const weekendISO = weekend.toDateString();
-          const checked = availabilities.includes(weekendISO);
+          const checked = availability.includes(weekendISO);
           return (
             <div key={weekendISO}>
               <div
@@ -49,9 +56,9 @@ export const SelectAvailabilityForm: FC<{ userId: User['id'] }> = ({
                   disabled={submitted}
                   onCheckedChange={(value) => {
                     value
-                      ? setAvailabilities([...availabilities, weekendISO])
-                      : setAvailabilities(
-                          availabilities.filter((d) => d !== weekendISO)
+                      ? setAvailability([...availability, weekendISO])
+                      : setAvailability(
+                          availability.filter((d) => d !== weekendISO)
                         );
                   }}
                 />
@@ -61,13 +68,18 @@ export const SelectAvailabilityForm: FC<{ userId: User['id'] }> = ({
         })}
       </ul>
 
-      <div className="self-end">
-        {submitted ? (
-          <p className="text-sm">bien reçu, cimer 🫡</p>
-        ) : (
-          <Button onClick={handleSubmit}>j&apos;envoie</Button>
-        )}
-      </div>
+      {submitted ? (
+        <Link
+          className={buttonVariants({ variant: 'secondary' })}
+          href="/results"
+        >
+          voir les résultats
+        </Link>
+      ) : (
+        <Button className="self-end" onClick={handleSubmit}>
+          j&apos;envoie
+        </Button>
+      )}
     </>
   );
 };

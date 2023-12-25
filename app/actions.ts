@@ -3,8 +3,20 @@
 import { supabase } from '@/lib/supabase';
 import { Availability, User } from '@/types/common';
 
-export async function submitAvailability(data: Availability) {
-  console.log(data);
+type SubmitData = {
+  userId: User['id'];
+  availability: Availability;
+};
+
+export async function submitAvailability(data: SubmitData) {
+  const { error } = await supabase
+    .from('user')
+    .update({ availability: data.availability })
+    .eq('id', data.userId);
+
+  if (error) {
+    throw error;
+  }
 }
 
 export async function createUser(formData: FormData) {

@@ -20,7 +20,7 @@ export default function RootLayout({
       <body
         className={cn(
           GeistSans.className,
-          'py-12 px-5 min-h-screen max-w-3xl mx-auto'
+          'py-12 px-5 min-h-screen max-w-xl mx-auto'
         )}
       >
         <ThemeProvider

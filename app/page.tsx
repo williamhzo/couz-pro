@@ -6,9 +6,12 @@ export default async function Home() {
   const users = await getUsers();
 
   return (
-    <main className="">
-      <Heading>couz.pro</Heading>
-      {users.length > 0 && <SelectUserForm users={users} />}
+    <main>
+      {users.length > 0 ? (
+        <SelectUserForm users={users} />
+      ) : (
+        <p className="text-sm text-muted-foreground">chargement des couz...</p>
+      )}
     </main>
   );
 }

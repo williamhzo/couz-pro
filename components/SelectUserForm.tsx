@@ -21,9 +21,10 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { User } from '@/types/common';
 import { FC } from 'react';
+import { cn } from '@/lib/utils';
 
 const FormSchema = z.object({
-  username: z.string(),
+  username: z.string({ required_error: 'choisis un nom' }),
 });
 
 type SelectUserFormProps = {
@@ -47,6 +48,8 @@ export const SelectUserForm: FC<SelectUserFormProps> = ({ users }) => {
     router.push('/select?' + new URLSearchParams({ id: userId.toString() }));
   }
 
+  const hasValue = !!form.getValues('username');
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
@@ -59,7 +62,7 @@ export const SelectUserForm: FC<SelectUserFormProps> = ({ users }) => {
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="clique là" />
+                    <SelectValue placeholder="clique ici" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -74,7 +77,16 @@ export const SelectUserForm: FC<SelectUserFormProps> = ({ users }) => {
           )}
         />
 
-        <Button type="submit">go</Button>
+        <Button
+          type="submit"
+          aria-disabled={!hasValue}
+          className={cn(
+            'transition-opacity duration-200',
+            hasValue ? 'opacity-100' : 'opacity-0'
+          )}
+        >
+          go
+        </Button>
       </form>
     </Form>
   );
